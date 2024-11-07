@@ -1,0 +1,401 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* variables */
+
+:root {
+    --scissors-1: hsl(39, 89%, 49%);
+    --scissors-2: hsl(40, 84%, 53%);
+    --paper-1: hsl(230, 89%, 62%);
+    --paper-2: hsl(230, 89%, 65%);
+    --rock-1: hsl(349, 71%, 52%);
+    --rock-2: hsl(349, 70%, 56%);
+    --dark-text: hsl(229, 25%, 31%);
+    --light-text: #ffffff;
+    --score-text: hsl(229, 64%, 46%);
+    --outline: hsl(217, 16%, 45%);
+    --header-outline: hsl(217, 16%, 45%);
+    --shadow-light: #00000026;
+    --shadow-med: #0000004d;
+}
+
+body {
+    font-family: "Barlow Semi Condensed", sans-serif;
+    background: radial-gradient(at top, hsl(214, 47%, 23%), hsl(237, 49%, 15%));
+    min-height: 100vh;
+    font-style: normal;
+    text-transform: uppercase;
+}
+
+.container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    padding: 2rem;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 150px;
+    border: 2px solid var(--header-outline);
+    border-radius: 30px;
+    max-width: 700px;
+    width: 100%;
+    padding: 1rem 1.4rem 1rem 2rem;
+}
+
+.score {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border-radius: 10px;
+    height: 100%;
+    width: 150px;
+    line-height: 1;
+    .title {
+        font-size: 1.2rem;
+        color: var(--score-text);
+        letter-spacing: 0.1rem;
+        font-weight: 600;
+    }
+    .number {
+        font-size: 4rem;
+        color: var(--dark-text);
+        font-weight: 700;
+        
+    }
+}
+
+/* Game */
+.game {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas:
+        "paper scissors"
+        "rock rock";
+    place-items: center;
+    height: 33rem;
+    padding-top: 4rem;
+    max-width: 600px;
+    width: 100%;
+}
+
+.game::before {
+    content: "";
+    position: absolute;
+    width: inherit;
+    max-width: 300px;
+    max-height: 17rem;
+    height: inherit;
+    left: 24%;
+    top: 32%;
+    background: url("./images/bg-triangle.svg") no-repeat;
+    z-index: -1;
+  
+}
+.btn-selected {
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background: none;
+    &[data-choice="rock"] {
+        grid-area: rock;
+    }
+    &[data-choice="paper"] {
+        grid-area: paper;
+    }
+    &[data-choice="scissors"] {
+        grid-area: scissors;
+    }
+}
+
+.choice {
+    position: relative;
+    background-color: #ffffff;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    width: 10rem;
+    height: 10rem;
+    box-shadow: inset 0 0.5rem #c8c8c8d8;
+    &::before,
+    &::after {
+        content: "";
+        position: absolute;
+        top: -15%;
+        left: -15%;
+        width: 130%;
+        height: 130%;
+        border-radius: 50%;
+        z-index: -1;
+    }
+    &::after {
+        opacity: 0;
+        transition: opacity 0.4s ease-in-out;
+    }
+    img {
+        transform: scale(1.5);
+    }
+}
+
+.choice.rock::before {
+    content: "";
+    background: linear-gradient(to bottom, var(--rock-1), var(--rock-2));
+    box-shadow: 0 0.5rem var(--shadow-med), 0 0.5rem var(--rock-2);
+    }
+.choice.paper::before {
+    content: "";
+    background: linear-gradient(to bottom, var(--paper-1), var(--paper-2));
+    box-shadow: 0 0.5rem var(--shadow-med), 0 0.5rem var(--paper-2);
+    }
+.choice.scissors::before {
+    content: "";
+    background: linear-gradient(to bottom, var(--scissors-1), var(--scissors-2));
+    box-shadow: 0 0.5rem var(--shadow-med), 0 0.5rem var(--scissors-2);
+    }
+.btn-selected {
+    border: none;
+    outline: none;
+    background: none;
+    cursor: pointer;
+}
+.btn-selected:focus .choice::after {
+    opacity: 1;
+    z-index: -2;
+    box-shadow: 0 0 0 2rem #223351;
+}
+
+    /* Results */
+.results {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    place-items: center;
+    grid-template-areas:
+      "you-title ai-title"
+      "you-picked ai-picked";
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .result {
+    min-width: 10rem;
+    min-height: 10rem;
+    background: #16213d;
+    border-radius: 50%;
+    transform: scale(1.4);
+    z-index: -1;
+  }
+  .result:first-of-type {
+    grid-area: you-picked;
+  }
+
+  .result:last-of-type {
+    grid-area: ai-picked;
+  }
+
+  .results-heading {
+    color: white;
+    font-size: 1.5rem;
+    letter-spacing: 0.1em;
+    padding: 4rem 0 8rem;
+  }
+  .results-heading:first-of-type {
+    grid-area: you-title;
+  }
+  .results-heading:last-of-type {
+    grid-area: ai-title;
+  }
+
+  .results.show-winner {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-areas:
+      "you-title . ai-title"
+      "you-picked result-winner ai-picked";
+      width: 100%;
+  }
+
+  .winner {
+    grid-area: result-winner;
+    display: grid;
+    place-items: center;
+  }
+
+  .winner .choice::after {
+    box-shadow: 0 0 0 40px #293251, 0 0 0 80px #232c4b, 0 0 0 130px #1e2949;
+    animation: winner 1s ease forwards;
+  }
+
+  @keyframes winner {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  .results-text {
+    color: white;
+    font-size: 3.5rem;
+    padding-bottom: 1.5rem;
+  }
+
+  /* play again button */
+  .play-again {
+    background: white;
+    outline: none;
+    border: 2px solid transparent;
+    border-radius: 0.6rem;
+    color: var(--dark-text);
+    padding: 0.6rem 3.5rem;
+    font-family: inherit;
+    font-weight: 600;
+    text-transform: inherit;
+    font-size: 1.3rem;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+  }
+  .play-again:focus {
+    border: 2px solid var(--outline);
+  }
+  .play-again:hover {
+    color: var(--rock-2);
+    transition: color 0.25s ease-out;
+  }
+  
+  /* rules button */
+.rules-btn {
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    color: var(--light-text);
+    background: none;
+    border: 2px solid var(--outline);
+    border-radius: 0.6rem;
+    padding: 0.6rem 2.5rem;
+    font-family: inherit;
+    text-transform: inherit;
+    font-size: 1.3rem;
+    letter-spacing: 0.1em;
+    outline: none;
+    cursor: pointer;
+  }
+  .rules-btn:focus {
+    border: 2px solid white;
+  }
+
+  /* modal */
+.modal {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    display: grid;
+    place-items: center;
+    background: var(--shadow-med);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    pointer-events: none;
+  }
+  .modal-container {
+    background: white;
+    border-radius: 0.5rem;
+  }
+  .modal-header {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding: 2rem 2rem 1rem;
+  }
+  .modal-heading {
+    font-size: 1.5rem;
+    color: var(--dark-text);
+  }
+  .show-modal {
+    opacity: 1;
+    pointer-events: initial;
+  }
+  .close-btn {
+    /* border: none;
+    outline: none;
+    background: none; */
+    cursor: pointer;
+  }
+  .rules-img {
+    padding: 2rem 4rem;
+  }
+  .hidden {
+    display: none;
+  }
+
+  @media only screen and (max-width: 680px) {
+    .container {
+        justify-content: space-around;
+    }
+    .choice {
+        width: 7rem;
+        height: 7rem;
+        img {
+            transform: scale(1);
+        }
+    }
+    .game {
+        height: 30rem;
+    }
+    .game::before {
+        left: 14%;
+        top: 34%;
+    }
+    .results {
+        grid-template-areas:
+            "you-picked ai-picked"
+            "you-title ai-title";
+      }
+    .results.show-winner {
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-areas:
+            "you-picked . ai-picked"
+            "you-title . ai-title"
+            "result-winner result-winner result-winner";
+        width: 100%;
+    }
+    .rules-btn {
+        right: auto;
+        border: 2px solid var(--outline);
+        position: initial;
+    }
+    .result {
+        min-width: 7rem;
+        min-height: 7rem;
+        background: #16213d;
+        border-radius: 50%;
+        transform: scale(1.07);
+        z-index: -1;
+    }
+    .results-heading {
+        padding: 0;
+    }
+    .winner .choice::after {
+        box-shadow: 0 0 0 40px #293251, 0 0 0 80px #232c4b, 0 0 0 130px #1e2949;
+        animation: winner 1s ease forwards;
+    }
+  }
+
+  @media only screen and (max-width: 375px) {
+    .game::before {
+        left: 0%;
+        top: 34%;
+    }
+}
